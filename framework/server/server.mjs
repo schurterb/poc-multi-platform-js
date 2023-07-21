@@ -1,14 +1,23 @@
+// process.env.PATH = `${process.env.PATH}:${__dirname}/framework:${__dirname}/src`;
+// import Module from 'module';
+// Module.__initPaths();
+
 // server.js
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 
-import ipModule from './core/ip.js';
+//TODO: Find a better way to do this part...
+import ipModule from '../../src/core/ip.mjs';
 
 const PORT = 3000;
-const PUBLIC_DIR = path.join(__dirname, 'www');
+const __dirname = path.dirname(new URL(import.meta.url).pathname).slice(os.platform() === 'win32' ? 1 : 0).replace('/framework/server', '');
+const FRAMEWORK_DIR = __dirname+'/framework/www';
+const SRC_DIR = __dirname+'/src/www';
 
 const server = http.createServer((req, res) => {
+  console.log(req);
   if (req.url === '/ip') {
     // ----- module executed -----
     ipModule.getIP().then(ip => {
@@ -19,31 +28,42 @@ const server = http.createServer((req, res) => {
   } else {
     let filePath;
     let contentType;
-    if (req.url.startsWith('/framework/www/')) {
-      filePath = path.join(__dirname, req.url);
-      contentType = getContentType(path.extname(filePath));
-    } else if (req.url.startsWith('/src/www/')) {
-      filePath = path.join(__dirname, req.url);
-      contentType = getContentType(path.extname(filePath));
-    } else {
-      filePath = path.join(PUBLIC_DIR, req.url === '/' ? 'index.html' : req.url);
-      contentType = getContentType(path.extname(filePath));
-    }
+    const relativePath = req.url;
+    let frameworkPath = path.join(FRAMEWORK_DIR, relativePath);
+    let srcPath = path.join(SRC_DIR, relativePath);
+    
+    console.log("relativePath: " + relativePath);
+    console.log("frameworkPath: " + frameworkPath, fs.existsSync(frameworkPath));
+    console.log("srcPath: " + srcPath, fs.existsSync(srcPath));
 
-    fs.readFile(filePath, (err, content) => {
-      if (err) {
-        if (err.code === 'ENOENT') {
-          res.writeHead(404);
-          res.end('404 Not Found');
+    if (fs.existsSync(frameworkPath)) {
+      filePath = frameworkPath;
+    } else if(fs.existsSync(srcPath)) {
+      filePath = srcPath;
+    } else {
+      res.writeHead(404);
+      res.end('404 Not Found');
+    }
+    console.log("filePath: " + filePath);
+      
+    if(filePath) {
+      contentType = getContentType(path.extname(filePath));
+      
+      fs.readFile(filePath, (err, content) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            res.writeHead(404);
+            res.end('404 Not Found');
+          } else {
+            res.writeHead(500);
+            res.end('500 Internal Server Error');
+          }
         } else {
-          res.writeHead(500);
-          res.end('500 Internal Server Error');
+          res.writeHead(200, { 'Content-Type': contentType });
+          res.end(content, 'utf-8');
         }
-      } else {
-        res.writeHead(200, { 'Content-Type': contentType });
-        res.end(content, 'utf-8');
-      }
-    });
+      });
+    }
   }
 });
 

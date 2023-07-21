@@ -30,3 +30,23 @@ function getOutput2() {
 function getOutput3() {
   return 'Output 3 text';
 }
+
+// ################################################
+// ### Call the Lambda Function from the Client ###
+// ################################################
+
+AWS.config.region = 'us-west-2';
+
+const lambda = new AWS.Lambda();
+
+const functionName = 'YOUR_FUNCTION_NAME';
+
+const params = {
+  FunctionName: functionName,
+  Payload: JSON.stringify({ /* your payload here */ })
+};
+
+lambda.invoke(params, (err, data) => {
+  if (err) console.log(err, err.stack);
+  else console.log(data);
+});

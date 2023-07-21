@@ -17,6 +17,8 @@
         background-color: #3e8e41;
       }
       div {
+        display: flex;
+        align-items: center;
         margin-top: 20px;
       }
       label {
@@ -32,22 +34,21 @@
     </style>
   </head>
   <body>
-    <button onclick="showOutput('output1')">Button 1</button>
-    <button onclick="showOutput('output2')">Button 2</button>
-    <button onclick="showOutput('output3')">Button 3</button>
-    <br><br>
     <div>
+      <button onclick="showOutput('output1')">Button 1</button>
       <label>Output 1:</label>
       <output id="output1"></output>
     </div>
     <div>
+      <button onclick="showOutput('output2')">Button 2</button>
       <label>Output 2:</label>
       <output id="output2"></output>
     </div>
     <div>
+      <button onclick="showOutput('output3')">Button 3</button>
       <label>Output 3:</label>
       <output id="output3"></output>
     </div>
     <script src="index.js"></script>
-  </body></html>
-
+  </body>
+</html>
