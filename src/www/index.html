@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <title>Button Output Example</title>
+    
+    <!--<script type="module" src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+
     <style>
       button {
         background-color: #4CAF50;
@@ -35,20 +38,20 @@
   </head>
   <body>
     <div>
-      <button onclick="showOutput('output1')">Button 1</button>
-      <label>Output 1:</label>
-      <output id="output1"></output>
+      <button onclick="showOutput('Browser')">Browser</button>
+      <label>Output:</label>
+      <output id="Browser"></output>
     </div>
     <div>
-      <button onclick="showOutput('output2')">Button 2</button>
-      <label>Output 2:</label>
-      <output id="output2"></output>
+      <button onclick="showOutput('Server')">Server</button>
+      <label>Output:</label>
+      <output id="Server"></output>
     </div>
     <div>
-      <button onclick="showOutput('output3')">Button 3</button>
-      <label>Output 3:</label>
-      <output id="output3"></output>
+      <button onclick="showOutput('Serverless')">Serverless</button>
+      <label>Output:</label>
+      <output id="Serverless"></output>
     </div>
-    <script src="index.js"></script>
+    <script type="module" src="index.js"></script>
   </body>
 </html>

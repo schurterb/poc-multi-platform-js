@@ -1,0 +1,5 @@
+Because of the stupidity of not making imports uniform across frameworks, we'll have to use a
+middle-man to smooth over the differences.
+
+Define 'tools.mjs' that returns a static object with references too all tools, 
+such as 'fetch', 'AWS', 'axios', etc. can be reached.  Import this in the core modules.

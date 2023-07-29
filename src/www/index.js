@@ -1,15 +1,17 @@
-function showOutput(outputId) {
+import getIP from './ip.mjs';
+
+window.showOutput = async function(outputId) {
   const output = document.getElementById(outputId);
   if (output) {
     switch (outputId) {
-      case 'output1':
-        output.textContent = getOutput1();
+      case 'Browser':
+        output.textContent = await runInBrowser();
         break;
-      case 'output2':
-        output.textContent = getOutput2();
+      case 'Server':
+        output.textContent = await runOnServer();
         break;
-      case 'output3':
-        output.textContent = getOutput3();
+      case 'Serverless':
+        output.textContent = await runOnServerless();
         break;
       default:
         console.error(`Invalid output ID: ${outputId}`);
@@ -19,34 +21,43 @@ function showOutput(outputId) {
   }
 }
 
-function getOutput1() {
-  return 'Output 1 text';
+async function runInBrowser() {
+  return await getIP();
 }
 
-function getOutput2() {
-  return 'Output 2 text';
+async function runOnServer() {
+  try {
+    const response = await fetch('/ip');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } else {
+      const data = await response.json();
+      return data;
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-function getOutput3() {
-  return 'Output 3 text';
+async function runOnServerless() {
+  AWS.config.region = 'us-west-2';
+  const lambda = new AWS.Lambda();
+  const functionName = 'YOUR_FUNCTION_NAME';
+  
+  const params = {
+    FunctionName: functionName,
+    Payload: ''
+  };
+  
+  try {
+    const data = await lambda.invoke(params).promise();
+    return data;
+  } catch (err) {
+    console.log(err, err.stack);
+  }
 }
+
 
 // ################################################
 // ### Call the Lambda Function from the Client ###
 // ################################################
-
-AWS.config.region = 'us-west-2';
-
-const lambda = new AWS.Lambda();
-
-const functionName = 'YOUR_FUNCTION_NAME';
-
-const params = {
-  FunctionName: functionName,
-  Payload: JSON.stringify({ /* your payload here */ })
-};
-
-lambda.invoke(params, (err, data) => {
-  if (err) console.log(err, err.stack);
-  else console.log(data);
-});
