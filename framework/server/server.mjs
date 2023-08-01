@@ -9,7 +9,7 @@ import path from 'path';
 import os from 'os';
 
 //TODO: Find a better way to do this part...
-import getIP from './ip.mjs';
+import { getIP } from './ip.mjs';
 
 const PORT = 3000;
 const __dirname = path.dirname(new URL(import.meta.url).pathname).slice(os.platform() === 'win32' ? 1 : 0);

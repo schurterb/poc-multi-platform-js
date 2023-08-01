@@ -1,4 +1,4 @@
-import getIP from './ip.mjs';
+import { getIP } from './js/ip.mjs';
 
 window.showOutput = async function(outputId) {
   const output = document.getElementById(outputId);

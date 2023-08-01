@@ -5,7 +5,6 @@ import axios from 'axios';
 
 // ### END IMPORTS ###
 
-const tools = {
+export const tools = {
   axios: axios
 };
-export default tools;
