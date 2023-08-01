@@ -31,7 +31,7 @@ async function runOnServer() {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     } else {
-      const data = await response.json();
+      const data = await response.text();
       return data;
     }
   } catch (error) {
