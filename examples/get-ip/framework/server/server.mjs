@@ -9,7 +9,7 @@ import path from 'path';
 import os from 'os';
 
 //TODO: Find a better way to do this part...
-// import { getIP } from './ip.mjs';
+import { getIP } from './ip.mjs';
 
 const PORT = 3000;
 const __dirname = path.dirname(new URL(import.meta.url).pathname).slice(os.platform() === 'win32' ? 1 : 0);
@@ -17,13 +17,11 @@ console.log("__dirname",__dirname);
 const WEB_DIR = path.normalize(path.join(__dirname, '../www'));
 
 const server = http.createServer((req, res) => {
-  if (req.url === '/sort') {
-    // getIP().then(ip => {
-    //   res.writeHead(200, { 'Content-Type': 'text/plain' });
-    //   res.end(`Your IP is ${ip}`);
-    // });
-    res.writeHead(500, { 'Content-Type': 'text/plain' });
-    res.end('ERROR');
+  if (req.url === '/ip') {
+    getIP().then(ip => {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end(`Your IP is ${ip}`);
+    });
   } else {
     let filePath;
     let contentType;
