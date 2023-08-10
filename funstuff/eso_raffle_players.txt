@@ -1,6 +1,0 @@
-user1: 42
-user2: 8
-user3: 227
-user4: 5523
-user5: 10420
-user6: 7237
